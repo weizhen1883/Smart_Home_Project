@@ -40,7 +40,6 @@ int main( int argc, char** argv){
 		exit(1);
 	} else {
 		sscanf(argv[1], "%016llx", &Tx_pipe);
-		printf("%016llx\n", Tx_pipe);
 		setup(Tx_pipe);
 
 		buf[0] = '0';
@@ -57,7 +56,6 @@ int main( int argc, char** argv){
 				radio.read(buf, 32);
 				if (buf[2] == '1') count_1++;
 				if (buf[2] == '0') count_0++;
-				printf("%c", buf[2]);
 			}
 			radio.stopListening();
 			if (count_1 > count_0) status = 1;
