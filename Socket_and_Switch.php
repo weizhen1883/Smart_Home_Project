@@ -40,9 +40,9 @@
 			     else echo "OFF";
 			   ?>
 			</p>
-			<button type="button" onclick="location.href='Socket_and_Switch.php?address=0xDEADBEEF00&onOff=1'">ON</button>
-			<button type="button" onclick="location.href='Socket_and_Switch.php?address=0xDEADBEEF00&onOff=0'">OFF</button>
-			<button type="button" onclick="location.href='Socket_and_Switch.php?address=0xDEADBEEF00&check'">check</button>
+			<button type="button" onclick="location.href='Socket_and_Switch.php?address=<?php print $Tx_addr; ?>&onOff=1'">ON</button>
+			<button type="button" onclick="location.href='Socket_and_Switch.php?address=<?php print $Tx_addr; ?>&onOff=0'">OFF</button>
+			<button type="button" onclick="location.href='Socket_and_Switch.php?address=<?php print $Tx_addr; ?>&check'">check</button>
 		</div>
 	</div>
 </body>

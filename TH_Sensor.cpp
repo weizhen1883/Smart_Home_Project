@@ -14,6 +14,7 @@ const int role_pin = 7;
 const uint64_t Rx_pipe = 0xDEADBEEF01;
 uint8_t buf[32];
 int Temperature, Humidity;
+int TSet, HSet, FanSet, ModelSet, VentSet;
 int count_T, count_H;
 
 void setup(uint64_t Tx_pipe){
@@ -59,6 +60,11 @@ void checkData(int count) {
 			} else {
 				if (Humidity == buf[3]) count_H++;
 			}
+			TSet = buf[4];
+			HSet = buf[5];
+			FanSet = buf[6];
+			ModelSet = buf[7];
+			VentSet = buf[8];
 		}
 	}
 	count++;
@@ -88,14 +94,21 @@ int main( int argc, char** argv){
 
 		if (argc == 3) {
 			checkData(count);
-			printf("Temperature: %d, Humidity: %d\n", Temperature, Humidity);
+			printf("Temperature: %d, Humidity: %d, TSet: %d, HSet: %d, FanSet: %c; ModelSet: %c, VentSet: %d\n", Temperature, Humidity, TSet, HSet, FanSet, ModelSet, VentSet);
 			if (*argv[2] == '1') return Temperature;
 			else if (*argv[2] == '2') return Humidity;
+			else if (*argv[2] == '3') return TSet;
+			else if (*argv[2] == '4') return HSet;
+			else if (*argv[2] == '5') return FanSet;
+			else if (*argv[2] == '6') return ModelSet;
+			else if (*argv[2] == '7') return VentSet;
 			else return 0;
-		} else if (argc == 6) {
+		} else if (argc == 8) {
 			buf[4] = atoi(argv[3]);
 			buf[5] = atoi(argv[4]);
-			buf[7] = *argv[5];
+			buf[6] = *argv[5];
+			buf[7] = *argv[6];
+			buf[8] = atoi(argv[7]);
 			for (i=0; i<10; i++)
 				radio.write(buf, 32);
 			printf("Have send the message!\n"); 
