@@ -24,7 +24,7 @@ void setup(uint64_t Tx_pipe){
 	radio.setRetries( 15, 15);
 	radio.setChannel(0x78);
 	radio.setPALevel(RF24_PA_MAX);
-	radio.setPALevel(RF24_PA_MAX);
+	radio.setDataRate(RF24_250KBPS);
 
 	radio.openWritingPipe(Tx_pipe);
 	radio.openReadingPipe(1,Rx_pipe);
@@ -35,45 +35,27 @@ void setup(uint64_t Tx_pipe){
 void checkData(int count) {
 	int i;
 	radio.write(buf, 32);
-	for (i=0; i<20; i++);
 	radio.startListening();
 	count_T = 0;
 	count_H = 0;
 	Temperature = 0;
 	Humidity = 0;
-	for (i=0; i<10; i++) {
+	for (i=0; i<100; i++) {
 		radio.read(buf, 32);
-		if (buf[2] == 49 && buf[3] == 49) {
-			printf("Garbage Message, Drop it!\n");
-		} else if (buf[2] == 0 && buf[3] == 0){
-			printf("Garbage Message, Drop it!\n");
-		} else {
-			if (count_T == 0) {
-				Temperature = buf[2];
-				count_T++;
-			} else {
-				if (Temperature == buf[2]) count_T++;
-			}
-			if (count_H == 0) {
-				Humidity = buf[3];
-				count_H++;
-			} else {
-				if (Humidity == buf[3]) count_H++;
-			}
+		if (buf[0] == '1' && buf[1] == '1') {
+			Temperature = buf[2];
+			Humidity = buf[3];
 			TSet = buf[4];
 			HSet = buf[5];
 			FanSet = buf[6];
 			ModelSet = buf[7];
 			VentSet = buf[8];
+			break;
 		}
+		printf("Temperature: %d, Humidity: %d, TSet: %d, HSet: %d, FanSet: %c; ModelSet: %c, VentSet: %d\n", buf[2], buf[3], buf[4], buf[5], buf[6], buf[7], buf[8]);
 	}
-	count++;
+	
 	radio.stopListening();
-
-	if (count_H < 3 || count_T < 3) {
-		for (i=0; i<20; i++);
-		if (count < 5) checkData(count);
-	}
 }
 
 int main( int argc, char** argv){

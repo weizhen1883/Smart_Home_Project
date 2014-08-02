@@ -21,7 +21,7 @@ void setup(uint64_t Tx_pipe){
 	radio.setRetries( 15, 15);
 	radio.setChannel(0x78);
 	radio.setPALevel(RF24_PA_MAX);
-	radio.setPALevel(RF24_PA_MAX);
+	radio.setDataRate(RF24_250KBPS);
 
 	radio.openWritingPipe(Tx_pipe);
 	radio.openReadingPipe(1,Rx_pipe);
@@ -48,9 +48,9 @@ int main( int argc, char** argv){
 
 		if (argc == 3) {
 			radio.write(buf, 32);
-			for (i=0; i<10; i++);
 			radio.startListening();
-			for (i=0; i<10; i++) {
+			//for (i=0; i<100; i++);
+			/*for (i=0; i<10; i++) {
 				radio.read(buf, 32);
 				if (buf[0] == '0' && buf[1] == '1') {
 					if (buf[2] == '1') status = 1;
@@ -58,7 +58,17 @@ int main( int argc, char** argv){
 					else status = 2;
 					break;
 				}
+			}*/
+			while (1) {
+				bool b = radio.read(buf, 32);
+				if (buf[0] == '0' && buf[1] == '1') {
+					if (buf[2] == '1') status = 1;
+					else if (buf[2] == '0') status = 0;
+					else status = 2;
+				}
+			printf("buf=%s; %s\n", buf, b?"true":"false");
 			}
+			
 			radio.stopListening();
 			printf("\nThe status is %d\n", status);
 			return status;

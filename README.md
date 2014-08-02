@@ -10,13 +10,13 @@ Temperature and Humidity Sensor
 
 32-bit BUF
 ===========
-buf[0]               buf[1]      buf[2]				  buf[3]		    buf[4]			   buf[5]		   buf[6]      buf[7]     buf[8]
+buf[0]               buf[1]      buf[2]		      buf[3]	      buf[4]	       buf[5]    	     buf[6]      buf[7]     buf[8]
 -------------------  ----------  -------------------  ----------------  -----------------  --------------  ----------  ---------  -----------
 0 Socket and Switch  0 set       0 off
-					 1 check     1 on
+			   1 check     1 on
 -------------------  ----------  -------------------  ----------------  -----------------  --------------  ----------  ---------  -----------
 1 Air Condition      0 set       current temperature  current humidity  temperature limit  humidity limit  0 fan auto  0 heater   vent status
- (TH Module)		 1~3 check																			   1 fan on    1 cooling  
+ (TH Module)	   1~3 check												     1 fan on    1 cooling  
 -------------------  ----------  -------------------  ----------------  -----------------  --------------  ----------  ---------  -----------
 2 Air Condition      0 set       vent status
  (Vent Module)       1 check

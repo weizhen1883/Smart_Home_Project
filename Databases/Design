@@ -1,0 +1,10 @@
+create database Smart_Home;
+
+use Smart_Home;
+
+//user system tables
+
+create table users (id tinyint unsigned not null auto_increment, primary key(id),username VARCHAR(20) not null, group_id tinyint unsigned not null, passhash VARCHAR(20) not null);
+
+create table groups (id tinyint unsigned not null auto_increment, primary key(id), group_name VARCHAR(15) not null, permissions int unsigned not null);
+

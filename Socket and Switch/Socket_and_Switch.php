@@ -9,9 +9,17 @@
 	include("menu.php");
 	function checkStatus($addr) {
 		exec("/var/www/cgi-bin/Socket_and_Switch $addr 1",$out,$return);
-		if ($return == "1") $GLOBALS['status'] = 1;
-        else if ($return == "0") $GLOBALS['status'] = 0;
-        else checkStatus($addr);
+		if ($return == "1") {
+			exec("/var/www/cgi-bin/Socket_and_Switch $addr 1",$out,$return);
+			if ($return == "1") $GLOBALS['status'] = 1;
+			else checkStatus($addr);
+        } else if ($return == "0") {
+        	exec("/var/www/cgi-bin/Socket_and_Switch $addr 1",$out,$return);
+			if ($return == "0") $GLOBALS['status'] = 0;
+			else checkStatus($addr);
+        } else { 
+        	checkStatus($addr);
+        }
 	}
 	function sendMessage($addr, $mesg) {
 		exec("/var/www/cgi-bin/Socket_and_Switch $addr 0 $mesg");

@@ -17,7 +17,6 @@
 			exec("/var/www/cgi-bin/TH_Sensor $addr 6",$out,$GLOBALS['ModelSet']);
 			exec("/var/www/cgi-bin/TH_Sensor $addr 7",$out,$GLOBALS['VentSet']);
 		}
-		
 	}
 	function sendMessage($addr, $T, $H, $fan_on_or_auto, $cooling_or_heater, $vent_status) {
 		exec("/var/www/cgi-bin/TH_Sensor $addr 0 $T $H $fan_on_or_auto $cooling_or_heater $vent_status");
