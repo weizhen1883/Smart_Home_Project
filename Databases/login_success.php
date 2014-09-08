@@ -22,7 +22,7 @@
     				<table width="100%" height="100%" background="source/background.jpg">
     					<tr height="10%">
     						<td width="35%" style="background-color:white">
-                                <img src="source/Logo.png" height="65px"> ROBOLUTION LLC
+                                <img src="source/Logo.png" height="65px"> ROBOLUTION TECH LLC
                             </td>
     						<td></td>
     					</tr>
@@ -39,6 +39,8 @@
                                             <?php
                                                 if(isset($_GET['devices'])){
                                                     include("device_menu.php");
+                                                }else if(isset($_GET['socket_and_switch'])){
+                                                    include("socket_switch_menu.php");
                                                 }else{
                                                     if($_SESSION['permission']==1){
                                                         include("administrator_menu.php"); 

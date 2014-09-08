@@ -35,6 +35,7 @@
 			if($username==$row['device_user']){
 				$can_use=1;
 				$HVAC_id=$row['id'];
+				$HVAC_address=$row['device_address'];
 				break;
 			}
 		}
@@ -54,6 +55,8 @@
 			$result=mysql_query($sql);
 			$sql="UPDATE $table_status SET AC_status='$AC_status', mode_status='$mode_status', fan_status='$fan_status' WHERE device_name='HVAC' and device_group='HVAC_CTRL'";
 			$result=mysql_query($sql);
+			$sql="INSERT INTO send_queue (device_address, device_table_name) VALUE ('$HVAC_address', '$table_settings')";
+			$setQueue_sql_result=mysql_query($sql);
 		}
     }
 ?>
@@ -206,6 +209,7 @@
 								while($row=mysql_fetch_array($result,MYSQL_ASSOC)){
 									$device_name=$row['device_name'];
 									$device_id=$row['id'];
+									$address=$row['device_address'];
 
 									if(isset($_GET['set_device_'. $i .''])){
 										if(isset($_POST['set_'. $i .''])){
@@ -215,8 +219,8 @@
 
 											$sql="UPDATE $table_settings SET temperature_setting=$temperature, humidity_setting=$humidity, vent_setting=$vent WHERE device_name='$device_name' and device_group='$device_group'";
 											$change_sql_result=mysql_query($sql);
-											$sql="UPDATE $table_status SET temperature_status=$temperature, humidity_status=$humidity, vent_status=$vent WHERE device_name='$device_name' and device_group='$device_group'";
-											$change_sql_result=mysql_query($sql);
+											$sql="INSERT INTO send_queue (device_address, device_table_name) VALUE ('$address', '$table_settings')";
+											$setQueue_sql_result=mysql_query($sql);
 										}
 									}
 									

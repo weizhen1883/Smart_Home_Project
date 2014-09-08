@@ -12,11 +12,15 @@
 			$db_name="Smart_Home";
 			$table_users="users";
 			$table_devices="devices";
-			$table_settings="HVAC_settings";
-			$table_status="HVAC_status";
 
 			$group_name=$_GET['device_group'];
 			$device_id=$_GET['id'];
+
+			if($group_name=='sockets'){
+				$table_checking="socket";
+			}elseif($group_name=='switches'){
+				$table_checking="switch";
+			}
 
 			mysql_connect("$host","$mysql_username","$mysql_password")or die("cannot connect");
 			mysql_select_db("$db_name")or die("cannot select DB");
@@ -30,9 +34,7 @@
 			if(isset($_POST['edit'])){
 				if(isset($_POST['devicename'])&&$device_name!=$_POST['devicename']){
 					$device_name_temp=$_POST['devicename'];
-					$update_sql="UPDATE $table_settings SET device_name='$device_name_temp' WHERE device_name='$device_name' and device_group='$group_name'";
-					$result=mysql_query($update_sql);
-					$update_sql="UPDATE $table_status SET device_name='$device_name_temp' WHERE device_name='$device_name' and device_group='$group_name'";
+					$update_sql="UPDATE $table_checking SET devicename='$device_name_temp' WHERE devicename='$device_name'";
 					$result=mysql_query($update_sql);
 					$update_sql="UPDATE $table_devices SET device_name='$device_name_temp' WHERE device_name='$device_name' and device_group='$group_name'";
 					$result=mysql_query($update_sql);
@@ -52,36 +54,20 @@
 						$sql="SELECT * FROM $table_devices WHERE device_name='$device_name' AND device_group='$group_name'";
 						$result=mysql_query($sql);
 						while($row=mysql_fetch_array($result,MYSQL_ASSOC)){
-							$select_sql="SELECT * FROM $table_settings";
+							$select_sql="SELECT * FROM $table_checking";
 							$select=mysql_query($select_sql);
 							$count=mysql_num_rows($select);
-							$select_sql="SELECT * FROM $table_settings WHERE device_name='$device_name' AND device_group='$group_name'";
+							$select_sql="SELECT * FROM $table_checking WHERE devicename='$device_name'";
 							$select=mysql_query($select_sql);
 							$select=mysql_fetch_array($select,MYSQL_ASSOC);
 							$id=$select['id'];
-							$delete_sql="DELETE FROM $table_settings WHERE device_name='$device_name' AND device_group='$group_name'";
+							$delete_sql="DELETE FROM $table_checking WHERE devicename='$device_name'";
 							$delete=mysql_query($delete_sql);
 							if($id!=$count){
-								$update_sql="UPDATE $table_settings SET id=$id WHERE id=$count";
+								$update_sql="UPDATE $table_checking SET id=$id WHERE id=$count";
 								$update_result=mysql_query($update_sql);
 							}
-							$reset_id_sql="ALTER TABLE $table_settings AUTO_INCREMENT = $count";
-							$reset_id=mysql_query($reset_id_sql);
-
-							$select_sql="SELECT * FROM $table_status";
-							$select=mysql_query($select_sql);
-							$count=mysql_num_rows($select);
-							$select_sql="SELECT * FROM $table_status WHERE device_name='$device_name' AND device_group='$group_name'";
-							$select=mysql_query($select_sql);
-							$select=mysql_fetch_array($select,MYSQL_ASSOC);
-							$id=$select['id'];
-							$delete_sql="DELETE FROM $table_status WHERE device_name='$device_name' AND device_group='$group_name'";
-							$delete=mysql_query($delete_sql);
-							if($id!=$count){
-								$update_sql="UPDATE $table_status SET id=$id WHERE id=$count";
-								$update_result=mysql_query($update_sql);
-							}
-							$reset_id_sql="ALTER TABLE $table_status AUTO_INCREMENT = $count";
+							$reset_id_sql="ALTER TABLE $table_checking AUTO_INCREMENT = $count";
 							$reset_id=mysql_query($reset_id_sql);
 
 							$select=mysql_query($sql);
@@ -163,36 +149,20 @@
 				$sql="SELECT * FROM $table_devices WHERE device_name='$device_name' AND device_group='$group_name'";
 				$result=mysql_query($sql);
 				while($row=mysql_fetch_array($result,MYSQL_ASSOC)){
-					$select_sql="SELECT * FROM $table_settings";
+					$select_sql="SELECT * FROM $table_checking";
 					$select=mysql_query($select_sql);
 					$count=mysql_num_rows($select);
-					$select_sql="SELECT * FROM $table_settings WHERE device_name='$device_name' AND device_group='$group_name'";
+					$select_sql="SELECT * FROM $table_checking WHERE devicename='$device_name'";
 					$select=mysql_query($select_sql);
 					$select=mysql_fetch_array($select,MYSQL_ASSOC);
 					$id=$select['id'];
-					$delete_sql="DELETE FROM $table_settings WHERE device_name='$device_name' AND device_group='$group_name'";
+					$delete_sql="DELETE FROM $table_checking WHERE devicename='$device_name'";
 					$delete=mysql_query($delete_sql);
 					if($id!=$count){
-						$update_sql="UPDATE $table_settings SET id=$id WHERE id=$count";
+						$update_sql="UPDATE $table_checking SET id=$id WHERE id=$count";
 						$update_result=mysql_query($update_sql);
 					}
-					$reset_id_sql="ALTER TABLE $table_settings AUTO_INCREMENT = $count";
-					$reset_id=mysql_query($reset_id_sql);
-
-					$select_sql="SELECT * FROM $table_status";
-					$select=mysql_query($select_sql);
-					$count=mysql_num_rows($select);
-					$select_sql="SELECT * FROM $table_status WHERE device_name='$device_name' AND device_group='$group_name'";
-					$select=mysql_query($select_sql);
-					$select=mysql_fetch_array($select,MYSQL_ASSOC);
-					$id=$select['id'];
-					$delete_sql="DELETE FROM $table_status WHERE device_name='$device_name' AND device_group='$group_name'";
-					$delete=mysql_query($delete_sql);
-					if($id!=$count){
-						$update_sql="UPDATE $table_status SET id=$id WHERE id=$count";
-						$update_result=mysql_query($update_sql);
-					}
-					$reset_id_sql="ALTER TABLE $table_status AUTO_INCREMENT = $count";
+					$reset_id_sql="ALTER TABLE $table_checking AUTO_INCREMENT = $count";
 					$reset_id=mysql_query($reset_id_sql);
 
 					$select=mysql_query($sql);
@@ -211,7 +181,7 @@
 					$reset_id=mysql_query($reset_id_sql);
 				}
 
-				header("location:hvac.php");
+				header("location:socket_and_switch.php?". $group_name ."");
 			}
 			
 		}
@@ -225,7 +195,7 @@
 			<tr height="650px">
 				<td></td>
 				<td width="900px" align="center" valign="middle">
-					<form name="device_edit" action="device_edit.php?id=<?php print $device_id;?>&device_group=<?php print $group_name;?>" method="post">
+					<form name="device_edit" action="device_edit2.php?id=<?php print $device_id;?>&device_group=<?php print $group_name;?>" method="post">
 						<table width="900px" height="650px">
 							<tr height="25px"><td align="center" valign="middle">DEVICE:&nbsp;<?php echo "$device_name";?></td></tr>
 							<tr height="1px"><td><hr></td></tr>
@@ -275,7 +245,7 @@
 								</table>
 							</td></tr>
 							<tr height="1px"><td><hr></td></tr>
-							<tr height="25px"><td align="center" valign="middle"><button type="button" onclick="location.href='hvac.php'">Go Back</button></td></tr>
+							<tr height="25px"><td align="center" valign="middle"><button type="button" onclick="location.href='socket_and_switch.php?<?php print $group_name;?>'">Go Back</button></td></tr>
 							<tr></tr>
 						</table>
 					</form>
