@@ -1,6 +1,6 @@
 Smart_Home_Project
 ==================
-  Device
+  Device  
 ===========
 Socket and Switch
  ./Socket_and_SWitch [address] [check/set: check->0; set->1] [on/off: on-> 1; off->0]
